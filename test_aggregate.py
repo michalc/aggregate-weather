@@ -18,5 +18,6 @@ def test_aggregate(httpx_mock):
 
         target = pq.read_table(f.name).to_pandas().to_dict('records')
 
+    # Note - the output is all zeros! Suspect aggregate doesn't work
     with open('fixtures/output.json', 'rb') as f:
         assert json.loads(f.read()) == target
