@@ -12,6 +12,10 @@ DEFAULT_URL='https://api.open-meteo.com/v1/forecast?latitude=51.5085&longitude=-
 DEFAULT_FIELDS=('rain', 'showers')
 
 def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
+    # If the source data isn't in the expected form, in most cases there will be an exception
+    # that should help debug. Save for example if some of the  "fields" are not present in the
+    # source data there will be a key error
+
     # Fetch data, raising an exception on non-200
     r = httpx.get(source_url)
     r.raise_for_status()
