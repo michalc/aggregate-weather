@@ -1,6 +1,7 @@
 import itertools
 import json
 from datetime import date
+from functools import reduce
 
 import httpx
 
@@ -16,7 +17,11 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
 
     results = zip(hourly['time'], *(hourly[field] for field in fields))
     grouped_by_day = itertools.groupby(sorted(results), key=lambda item: item[0][:10])
-    grouped_by_day_materialized = {key: list(items) for key, items in grouped_by_day}
+
+    summed_by_day = {
+        day: reduce(lambda total, item: total + item[1:], items, (0,) * len(fields))
+        for day, items in grouped_by_day
+    }
 
     with open(target_file, 'wb') as f:
-        f.write(json.dumps(grouped_by_day_materialized).encode('utf-8'))
+        f.write(json.dumps(summed_by_day).encode('utf-8'))
