@@ -4,6 +4,9 @@ from datetime import date
 from functools import reduce
 
 import httpx
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 DEFAULT_URL='https://api.open-meteo.com/v1/forecast?latitude=51.5085&longitude=-0.1257&hourly=temperature_2m,rain,showers,visibility&past_days=31'
 DEFAULT_FIELDS=('rain', 'showers')
@@ -32,6 +35,4 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
         }
         for day, values in summed_by_day.items()
     ]
-
-    with open(target_file, 'wb') as f:
-        f.write(json.dumps(summed_by_day_dicts).encode('utf-8'))
+    pq.write_table(pa.Table.from_pandas(pd.DataFrame(summed_by_day_dicts)), target_file)

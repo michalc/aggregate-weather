@@ -1,12 +1,15 @@
 import json
 import tempfile
 
+import pyarrow.parquet as pq
+
 from aggregate import aggregate
+
 
 
 def test_aggregate():
     with tempfile.NamedTemporaryFile() as f:
         aggregate(target_file=f.name)
 
-        results = json.loads(f.read())
-        assert len(results) == 38
+        table = pq.read_table(f.name)
+        assert len(table) == 38
