@@ -9,4 +9,4 @@ def test_aggregate():
         aggregate(target_file=f.name)
 
         results = json.loads(f.read())
-        assert len(results[0]) == 3
+        assert len(results) == 38
