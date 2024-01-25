@@ -2,4 +2,5 @@ from aggregate import aggregate
 
 
 def test_aggregate():
-	aggregate()
+	result = aggregate()
+	assert 'latitude' in result
