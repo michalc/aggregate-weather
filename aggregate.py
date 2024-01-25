@@ -22,6 +22,16 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
         day: reduce(lambda total, item: total + item[1:], items, (0,) * len(fields))
         for day, items in grouped_by_day
     }
+    summed_by_day_dicts = [
+        {
+            'day': day,
+            **{
+                field: values[i]
+                for i, field in enumerate(fields)
+            }
+        }
+        for day, values in summed_by_day.items()
+    ]
 
     with open(target_file, 'wb') as f:
-        f.write(json.dumps(summed_by_day).encode('utf-8'))
+        f.write(json.dumps(summed_by_day_dicts).encode('utf-8'))
