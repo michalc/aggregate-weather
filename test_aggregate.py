@@ -9,4 +9,4 @@ def test_aggregate():
         aggregate(target_file=f.name)
 
         results = json.loads(f.read())
-        assert 'latitude' in results
+        assert 'rain' in results

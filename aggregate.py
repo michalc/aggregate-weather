@@ -10,6 +10,7 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
     r.raise_for_status()
 
     source_data = r.json()
+    hourly = source_data['hourly']
 
     with open(target_file, 'wb') as f:
-        f.write(json.dumps(source_data).encode('utf-8'))
+        f.write(json.dumps(hourly).encode('utf-8'))
