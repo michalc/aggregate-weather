@@ -12,5 +12,7 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
     source_data = r.json()
     hourly = source_data['hourly']
 
+    results = zip(hourly['time'], hourly['rain'], hourly['showers'])
+
     with open(target_file, 'wb') as f:
-        f.write(json.dumps(hourly).encode('utf-8'))
+        f.write(json.dumps(list(results)).encode('utf-8'))
