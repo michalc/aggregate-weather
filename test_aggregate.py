@@ -16,6 +16,7 @@ def test_aggregate(httpx_mock):
     with tempfile.NamedTemporaryFile() as f:
         aggregate(target_file=f.name)
 
-        table = pq.read_table(f.name)
-        assert len(table) == 38
+        target = pq.read_table(f.name).to_pandas().to_dict('records')
 
+    with open('fixtures/output.json', 'rb') as f:
+        assert json.loads(f.read()) == target
