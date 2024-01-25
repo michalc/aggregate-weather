@@ -14,7 +14,7 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
     source_data = r.json()
     hourly = source_data['hourly']
 
-    results = zip(hourly['time'], hourly['rain'], hourly['showers'])
+    results = zip(hourly['time'], *(hourly[field] for field in fields))
     grouped_by_day = itertools.groupby(sorted(results), key=lambda item: item[0][:10])
     grouped_by_day_materialized = {key: list(items) for key, items in grouped_by_day}
 
