@@ -28,7 +28,11 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
 
     # Sum data by day
     summed_by_day = {
-        day: reduce(lambda total, item: total + item[1:], items, (0,) * len(fields))
+        day: reduce(
+            (lambda total, item: total + item[1:]),
+            items,
+            (0,) * len(fields),
+        )
         for day, items in grouped_by_day
     }
 
