@@ -1,6 +1,6 @@
 import itertools
 import json
-from datetime import date
+from datetime import datetime, date
 from functools import reduce
 
 import httpx
@@ -24,7 +24,7 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
     source_data = r.json()
     hourly = source_data['hourly']
     results = zip(hourly['time'], *(hourly[field] for field in fields))
-    grouped_by_day = itertools.groupby(sorted(results), key=lambda item: item[0][:10])
+    grouped_by_day = itertools.groupby(sorted(results), key=lambda item: datetime.strptime(item[0][:10], "%Y-%m-%d").date())
 
     # Sum data by day
     summed_by_day = {
@@ -40,7 +40,7 @@ def aggregate(target_file, source_url=DEFAULT_URL, fields=DEFAULT_FIELDS):
     # Tthis makes it fairly straightforward to debug and also save via pandas
     summed_by_day_dicts = [
         {
-            'day': day,
+            'day': str(day),
             **{
                 field: values[i]
                 for i, field in enumerate(fields)
